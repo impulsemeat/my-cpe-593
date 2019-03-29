@@ -22,33 +22,45 @@ public:
 			root.next[i] = nullptr;
 	}
 	~Trie() {}
-	void insert(char *word) {
+	void insert(string word) {
+		char *cstr = new char[word.size() + 1];
+		word.copy(cstr, word.size() + 1);
+		cstr[word.size()] = '\0';
 		Node* p = &root;
-		for (int i = 0; i < strlen(word); i++) {
-			if (p->next[word[i] - 97] == nullptr)
-				p->next[word[i] - 97] = new Node();
-			p = p->next[word[i] - 97];
+		for (int i = 0; i < strlen(cstr); i++) {
+			if (p->next[cstr[i] - 97] == nullptr)
+				p->next[cstr[i] - 97] = new Node();
+			p = p->next[cstr[i] - 97];
 		}
 		p->isWord = true;
+		delete cstr;
 	}
 
-	bool contains(char *word) {
+	bool contains(string word) {
+		char *cstr = new char[word.size() + 1];
+		word.copy(cstr, word.size() + 1);
+		cstr[word.size()] = '\0';
 		Node* p = &root;
-		for (int i = 0; i < strlen(word); i++) {
-			if (p->next[word[i] - 97] == nullptr)
+		for (int i = 0; i < strlen(cstr); i++) {
+			if (p->next[cstr[i] - 97] == nullptr)
 				return false;
-			p = p->next[word[i] - 97];
+			p = p->next[cstr[i] - 97];
 		}
+		delete cstr;
 		return p->isWord;
 	}
 
-	bool containsPrefix(char *word) {
+	bool containsPrefix(string word) {
+		char *cstr = new char[word.size() + 1];
+		word.copy(cstr, word.size() + 1);
+		cstr[word.size()] = '\0';
 		Node* p = &root;
-		for (int i = 0; i < strlen(word); i++) {
-			if (p->next[word[i] - 97] == nullptr)
+		for (int i = 0; i < strlen(cstr); i++) {
+			if (p->next[cstr[i] - 97] == nullptr)
 				return false;
-			p = p->next[word[i] - 97];
+			p = p->next[cstr[i] - 97];
 		}
+		delete cstr;
 		return true;
 	};
 };
@@ -58,10 +70,11 @@ int main() {
 	ifstream inFile("dict.txt", ios::in);
 	if (!inFile) {
 		cerr << "File could not be opened" << endl;
+		system("PAUSE");
 		exit(EXIT_FAILURE);
 	}
 	while (!inFile.eof()) {
-		char *inWord;
+		string inWord;
 		inFile >> inWord;
 		MyDict.insert(inWord);
 	}
@@ -80,21 +93,23 @@ int main() {
 		{
 		case 'S': {
 			cout << "please enter a word you would like to search without white space:\n";
-			char *entry;
+			string entry;
 			cin >> entry;
 			if (MyDict.contains(entry))
-				cout << "The word is in the dictionary" << endl;
+				cout << "The word is in the dictionary\n" << endl;
 			else
-				cout << "The word is not found in the dictionary" << endl;
+				cout << "The word is not found in the dictionary\n" << endl;
+			break;
 		}
 		case 'P': {
 			cout << "please enter a prefix you would like to search without white space:\n";
-			char *entry;
+			string entry;
 			cin >> entry;
 			if (MyDict.containsPrefix(entry))
-				cout << "The prefix is in the dictionary" << endl;
+				cout << "The prefix is in the dictionary\n" << endl;
 			else
-				cout << "The prefix is not found in the dictionary" << endl;
+				cout << "The prefix is not found in the dictionary\n" << endl;
+			break;
 		}
 		case 'Q':
 		{
@@ -108,5 +123,6 @@ int main() {
 		}
 		}
 	} while (choice != 'Q');
+	system("PAUSE");
 	return EXIT_SUCCESS;
 }
